@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Restaurante del Pasado - Aprende Español</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Great+Vibes&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#E53E3E',
+                            yellow: '#ECC94B',
+                            green: '#38A169',
+                            orange: '#DD6B20',
+                            terracotta: '#C05621',
+                            warmBg: '#FFFDF9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        heading: ['Fredoka', 'sans-serif'],
+                        cursive: ['Great Vibes', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FDFBF7;
+            font-family: 'Nunito', sans-serif;
+            user-select: none;
+        }
+
+        /* Certificate Print Styling */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-section, #certificate-section * {
+                visibility: visible;
+            }
+            #certificate-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none !important;
+                border: none !important;
+                background: white !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .bounce-short {
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .badge-glow {
+            box-shadow: 0 0 15px rgba(236, 201, 75, 0.6);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white shadow-lg no-print">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2 rounded-2xl backdrop-blur-md">
+                    <i class="fa-solid font-bold fa-utensils text-2xl text-yellow-300"></i>
+                </div>
+                <div>
+                    <h1 class="font-heading font-bold text-xl sm:text-2xl tracking-wide">El Restaurante del Pasado</h1>
+                    <p class="text-xs text-amber-100 font-semibold">Comida & El Pretérito</p>
+                </div>
+            </div>
+
+            <!-- Player Info & Score Pill -->
+            <div id="nav-player-info" class="hidden flex items-center space-x-4 bg-black/20 px-4 py-1.5 rounded-full border border-white/20">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-user-astronaut text-yellow-300"></i>
+                    <span id="nav-student-name" class="font-bold text-sm">Estudiante</span>
+                </div>
+                <div class="h-4 w-px bg-white/30"></div>
+                <div class="flex items-center space-x-1">
+                    <i class="fa-solid fa-star text-yellow-300"></i>
+                    <span id="nav-score" class="font-extrabold text-amber-200">0</span>
+                    <span class="text-xs font-bold text-amber-100">/ 100 pts</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 flex-grow flex flex-col justify-center">
+
+        <!-- STEP 0: Welcome & Name Input -->
+        <section id="screen-welcome" class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-amber-200 text-center max-w-xl mx-auto w-full transition-all">
+            <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-red-400">
+                <i class="fa-solid fa-hat-chef text-5xl text-red-600"></i>
+            </div>
+            <h2 class="font-heading text-3xl font-bold text-slate-800 mb-2">¡Bienvenidos al Restaurante!</h2>
+            <p class="text-slate-600 mb-6 text-sm sm:text-base">
+                Travel back in time to work in the famous Spanish restaurant! Practice your food vocabulary (<span class="font-semibold text-orange-600">comida</span>) and past tense verbs (<span class="font-semibold text-red-600">pretérito</span>) to win your official diploma.
+            </p>
+
+            <form id="form-start" onsubmit="startGame(event)" class="space-y-4">
+                <div>
+                    <label for="student-name-input" class="block text-left text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                        Tu Nombre / Your Name (for the certificate):
+                    </label>
+                    <input type="text" id="student-name-input" required placeholder="Escribe tu nombre aquí..."
+                           class="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-orange-500 focus:outline-none font-bold text-slate-700 text-lg transition">
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-heading font-bold text-xl py-3.5 px-6 rounded-2xl shadow-lg transform hover:-translate-y-0.5 transition duration-150">
+                    ¡Comenzar la Aventura! <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </form>
+        </section>
+
+        <!-- STEP 1: Quest Selection Dashboard -->
+        <section id="screen-dashboard" class="hidden space-y-6">
+            <div class="bg-amber-100/70 border-2 border-amber-300 rounded-2xl p-4 flex items-center justify-between">
+                <div>
+                    <h3 class="font-heading font-bold text-amber-900 text-lg">Misiones del Restaurante</h3>
+                    <p class="text-xs text-amber-800">Complete all 3 quests to unlock your official Spanish Certificate!</p>
+                </div>
+                <div class="text-right">
+                    <span id="completed-count" class="font-bold text-xl text-amber-900">0/3</span>
+                    <span class="text-xs block text-amber-700 font-semibold">Completadas</span>
+                </div>
+            </div>
+
+            <!-- Quest Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Quest 1 Card -->
+                <div id="card-quest-1" class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 flex flex-col justify-between hover:shadow-xl transition">
+                    <div>
+                        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-4">
+                            1
+                        </div>
+                        <h4 class="font-heading text-xl font-bold text-slate-800 mb-1">Vocabulario de Comida</h4>
+                        <p class="text-slate-500 text-xs sm:text-sm mb-4">
+                            Identify Spanish food, drinks, fruits, meats & utensils (8 preguntas).
+                        </p>
+                    </div>
+                    <div>
+                        <div id="status-q1" class="text-xs font-bold text-amber-600 bg-amber-50 py-1 px-3 rounded-full inline-block mb-3">
+                            <i class="fa-solid fa-circle-play mr-1"></i> Disponible (32 pts)
+                        </div>
+                        <button onclick="launchQuest(1)" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-sm transition">
+                            Jugar Misión 1
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quest 2 Card -->
+                <div id="card-quest-2" class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 flex flex-col justify-between hover:shadow-xl transition">
+                    <div>
+                        <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-4">
+                            2
+                        </div>
+                        <h4 class="font-heading text-xl font-bold text-slate-800 mb-1">Conjugación Pretérito</h4>
+                        <p class="text-slate-500 text-xs sm:text-sm mb-4">
+                            Master regular past tense verbs: <i>comer, beber, cenar, cocinar, preparar</i> (9 preguntas).
+                        </p>
+                    </div>
+                    <div>
+                        <div id="status-q2" class="text-xs font-bold text-slate-500 bg-slate-100 py-1 px-3 rounded-full inline-block mb-3">
+                            <i class="fa-solid fa-lock mr-1"></i> Bloqueado (36 pts)
+                        </div>
+                        <button id="btn-q2" onclick="launchQuest(2)" disabled class="w-full bg-slate-300 text-slate-500 cursor-not-allowed font-bold py-2.5 rounded-xl text-sm transition">
+                            Jugar Misión 2
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quest 3 Card -->
+                <div id="card-quest-3" class="bg-white rounded-3xl p-6 shadow-md border-2 border-slate-200 flex flex-col justify-between hover:shadow-xl transition">
+                    <div>
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center font-bold text-2xl mb-4">
+                            3
+                        </div>
+                        <h4 class="font-heading text-xl font-bold text-slate-800 mb-1">Restaurante Misterioso</h4>
+                        <p class="text-slate-500 text-xs sm:text-sm mb-4">
+                            Complete real-world dinner dialogues combining past verbs & food (8 preguntas).
+                        </p>
+                    </div>
+                    <div>
+                        <div id="status-q3" class="text-xs font-bold text-slate-500 bg-slate-100 py-1 px-3 rounded-full inline-block mb-3">
+                            <i class="fa-solid fa-lock mr-1"></i> Bloqueado (32 pts)
+                        </div>
+                        <button id="btn-q3" onclick="launchQuest(3)" disabled class="w-full bg-slate-300 text-slate-500 cursor-not-allowed font-bold py-2.5 rounded-xl text-sm transition">
+                            Jugar Misión 3
+                        </button>
+                    </div>
+                </div>
+            </div>
+<!-- ... existing code -->
+                    <!-- Score & Level Stats -->
+                    <div class="flex justify-center items-center space-x-6 py-4">
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-2">
+                            <span class="block text-xs text-amber-700 font-bold uppercase">Nota Final / Grade</span>
+                            <span id="cert-score" class="font-heading font-extrabold text-3xl text-amber-900">100 / 100 (100%)</span>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-2">
+                            <span class="block text-xs text-amber-700 font-bold uppercase">Nivel Obtenido</span>
+                            <span id="cert-rank" class="font-heading font-extrabold text-3xl text-amber-900">Maestro Chef (A+)</span>
+                        </div>
+                    </div>
+
+                    <!-- Date & Signatures -->
+                    <div class="grid grid-cols-2 gap-8 pt-8 max-w-lg mx-auto border-t border-slate-200">
+                        <div>
+                            <span id="cert-date" class="font-bold text-slate-700 text-sm block border-b border-slate-300 pb-1">10/11/2026</span>
+                            <span class="text-xs text-slate-400 uppercase mt-1 block">Fecha de Emisión</span>
+                        </div>
+                        <div>
+                            <span class="font-cursive text-3xl text-red-700 block border-b border-slate-300 pb-1">Sra. Albarrán</span>
+                            <span class="text-xs text-slate-400 uppercase mt-1 block">Firma de la Maestra</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200 bg-white no-print">
+        <p>El Restaurante del Pasado • Juego Educativo de Español</p>
+    </footer>
+
+    <!-- Game Logic Scripts -->
+    <script>
+        /* ================= GAME STATE ================= */
+        let gameState = {
+            playerName: '',
+            score: 0,
+            completedQuests: [false, false, false],
+            currentQuestIndex: null,
+            currentQuestionIndex: 0,
+            questScores: [0, 0, 0]
+        };
+
+        /* ================= QUEST DATA (25 QUESTIONS TOTAL, 4 PTS EACH = 100 PTS) ================= */
+        const questsData = [
+            // QUEST 1: Vocabulario de Comida (8 Questions)
+            {
+                id: 1,
+                title: "Misión 1: Vocabulario de Comida",
+                questions: [
+                    {
+                        type: "mc",
+                        question: "¿Cuál de los siguientes elementos es una <b>fruta</b>?",
+                        options: ["El pollo", "La manzana", "El tenedor", "La leche"],
+                        correct: 1, // B
+                        explanation: "'La manzana' (apple) es una fruta dulce."
+                    },
+                    {
+                        type: "mc",
+                        question: "¿Qué utensilio usas para tomar la sopa caliente?",
+                        options: ["El cuchillo", "El vaso", "La servilleta", "La cuchara"],
+                        correct: 3, // D
+                        explanation: "Usamos 'la cuchara' (spoon) para líquidos y sopas."
+                    },
+                    {
+                        type: "mc",
+                        question: "Selecciona la bebida (drink) fría:",
+                        options: ["El jugo de naranja", "Las papas fritas", "El pastel", "La ensalada"],
+                        correct: 0, // A
+                        explanation: "'El jugo de naranja' es una bebida de fruta."
+                    },
+                    {
+                        type: "mc",
+                        question: "¿Cuál de estos alimentos es un <b>postre</b> (dessert)?",
+                        options: ["El pescado", "La cebolla", "El flan", "La pimienta"],
+                        correct: 2, // C
+                        explanation: "'El flan' es un postre tradicional y delicioso."
+                    },
+                    {
+                        type: "mc",
+                        question: "¿Cuáles son <b>verduras</b> (vegetables) saludables?",
+                        options: ["Las fresas y las uvas", "Las zanahorias y la lechuga", "El bistec y el jamón", "El helado y las galletas"],
+                        correct: 1, // B
+                        explanation: "'Las zanahorias' y 'la lechuga' son vegetales."
+                    },
+                    {
+                        type: "mc",
+                        question: "¿Qué usas para cortar la carne en el plato?",
+                        options: ["La taza", "El tenedor", "El cuchillo", "La cuchara"],
+                        correct: 2, // C
+                        explanation: "El utensilio adecuado para cortar comida es 'el cuchillo' (knife)."
+                    },
+                    {
+                        type: "mc",
+                        question: "¿Cuál de las opciones es un tipo de <b>carne</b>?",
+                        options: ["El queso", "El arroz", "El pan", "El pollo asado"],
+                        correct: 3, // D
+                        explanation: "'El pollo asado' (roasted chicken) es una carne popular."
+                    },
+                    {
+                        type: "mc",
+                        question: "¿Qué producto es lácteo (dairy) y se come con pan?",
+                        options: ["La sal", "El queso", "El ajo", "El vinagre"],
+                        correct: 1, // B
+                        explanation: "'El queso' (cheese) es un alimento lácteo."
+                    }
+                ]
+            },
+
+            // QUEST 2: Conjugación en Pretérito (9 Questions - Regular Verbs Only)
+            {
+                id: 2,
+                title: "Misión 2: Conjugación en Pretérito (Verbos Regulares)",
+                questions: [
+                    {
+                        type: "mc",
+                        question: "Ayer yo ________ una pizza deliciosa en el restaurante. (comer)",
+                        options: ["comió", "comiste", "comí", "comieron"],
+                        correct: 2, // C
+                        explanation: "Pretérito regular de 'Yo' (-ER): <b>comí</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "¿Qué bebida ________ tú durante el almuerzo? (beber)",
+                        options: ["bebiste", "bebió", "bebimos", "bebieron"],
+                        correct: 0, // A
+                        explanation: "Pretérito regular de 'Tú' (-ER): <b>bebiste</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "El camarero ________ los platos sucios de la mesa. (limpiar)",
+                        options: ["limpié", "limpiaron", "limpiaste", "limpió"],
+                        correct: 3, // D
+                        explanation: "Pretérito regular de 'Él/Ella' (-AR): <b>limpió</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "Nosotros ________ la cena para toda la familia. (preparar)",
+                        options: ["preparé", "prepararon", "preparamos", "preparaste"],
+                        correct: 2, // C
+                        explanation: "Pretérito regular de 'Nosotros' (-AR): <b>preparamos</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "Mis amigos ________ un pastel de chocolate. (compartir)",
+                        options: ["compartió", "compartieron", "compartiste", "compartimos"],
+                        correct: 1, // B
+                        explanation: "Pretérito regular de 'Ellos/Ellas' (-IR): <b>compartieron</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "Anoche tú ________ pollo con arroz en el comedor. (cenar)",
+                        options: ["cené", "cenaste", "cenó", "cenaron"],
+                        correct: 1, // B
+                        explanation: "Pretérito regular de 'Tú' (-AR): <b>cenaste</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "El cocinero ________ las verduras frescas temprano. (lavar)",
+                        options: ["lavé", "lavaron", "lavó", "lavaste"],
+                        correct: 2, // C
+                        explanation: "Pretérito regular de 'Él' (-AR): <b>lavó</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "Yo ________ una limonada grande porque tenía sed. (tomar)",
+                        options: ["tomé", "tomaste", "tomó", "tomaron"],
+                        correct: 0, // A
+                        explanation: "Pretérito regular de 'Yo' (-AR): <b>tomé</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "Ustedes ________ la receta en su cuaderno de cocina. (escribir)",
+                        options: ["escribí", "escribió", "escribiste", "escribieron"],
+                        correct: 3, // D
+                        explanation: "Pretérito regular de 'Ustedes' (-IR): <b>escribieron</b>."
+                    }
+                ]
+            },
+
+            // QUEST 3: El Restaurante Misterioso (8 Questions - Dialogues & Context)
+            {
+                id: 3,
+                title: "Misión 3: El Restaurante Misterioso",
+                questions: [
+                    {
+                        type: "mc",
+                        question: "<b>Cliente:</b> Anoche mi familia y yo ________ (cenar) aquí. Yo ________ (tomar) té.",
+                        options: [
+                            "cenaron / tomó",
+                            "cenamos / tomé",
+                            "cené / tomamos",
+                            "cenaste / tomaste"
+                        ],
+                        correct: 1, // B
+                        explanation: "'Mi familia y yo' = nosotros (cenamos). 'Yo' = tomé."
+                    },
+                    {
+                        type: "mc",
+                        question: "<b>Camarero:</b> ¿Ustedes ________ (probar) la sopa de tomate especial?",
+                        options: [
+                            "probamos",
+                            "probaste",
+                            "probó",
+                            "probaron"
+                        ],
+                        correct: 3, // D
+                        explanation: "Para 'Ustedes', el pretérito regular de probar (-AR) es <b>probaron</b>."
+                    },
+                    {
+                        type: "mc",
+                        question: "<b>Sofía:</b> El chef ________ (cocinar) el pescado y los clientes ________ (comer) todo.",
+                        options: [
+                            "cocinó / comieron",
+                            "cocinaste / comió",
+                            "cociné / comimos",
+                            "cocinaron / comiste"
+                        ],
+                        correct: 0, // A
+                        explanation: "'El chef' (él) = cocinó. 'Los clientes' (ellos) = comieron."
+                    },
+                    {
+                        type: "mc",
+                        question: "<b>Mateo:</b> El restaurante ________ (abrir) a las ocho y el mesero ________ (vender) jugos.",
+                        options: [
+                            "abriste / vendiste",
+                            "abrimos / vendimos",
+                            "abrió / vendió",
+                            "abrieron / vendieron"
+                        ],
+                        correct: 2, // C
+                        explanation: "'El restaurante' (él) = abrió. 'El mesero' (él) = vendió."
+                    },
+                    {
+                        type: "mc",
+                        question: "<b>María:</b> Yo no ________ (tomar) café, solamente ________ (beber) agua.",
+                        options: [
+                            "tomó / bebió",
+                            "tomé / bebí",
+                            "tomaste / bebiste",
+                            "tomaron / bebieron"
+                        ],
+                        correct: 1, // B
+                        explanation: "'Yo' = tomé (-AR) y bebí (-ER)."
+                    },
+                    {
+                        type: "mc",
+                        question: "<b>Chef:</b> Mis ayudantes ________ (preparar) la salsa y tú ________ (cortar) el pan.",
+                        options: [
+                            "prepararon / cortaste",
+                            "preparé / cortó",
+                            "preparaste / cortamos",
+                            "preparó / cortaron"
+                        ],
+                        correct: 0, // A
+                        explanation: "'Mis ayudantes' (ellos) = prepararon. 'Tú' = cortaste."
+                    },
+                    {
+                        type: "mc",
+                        question: "<b>Lucas:</b> Nosotros ________ (beber) jugo de manzana y los niños ________ (comer) helado.",
+                        options: [
+                            "bebiste / comió",
+                            "bebió / comiste",
+                            "bebimos / comieron",
+                            "bebieron / comimos"
+                        ],
+                        correct: 2, // C
+                        explanation: "'Nosotros' = bebimos. 'Los niños' (ellos) = comieron."
+                    },
+                    {
+                        type: "mc",
+                        question: "<b>Camarero:</b> La Sra. Albarrán ________ (limpiar) la mesa y yo ________ (escribir) la cuenta.",
+                        options: [
+                            "limpiaron / escribiste",
+                            "limpió / escribí",
+                            "limpié / escribió",
+                            "limpiaste / escribieron"
+                        ],
+                        correct: 1, // B
+                        explanation: "'Sra. Albarrán' (ella) = limpió. 'Yo' = escribí."
+                    }
+                ]
+            }
+        ];
+
+        /* ================= AUDIO SYNTH EFFECTS ================= */
+        const playSound = (type) => {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+                    osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.3); // G5
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.4);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
+                    osc.frequency.setValueAtTime(180, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else if (type === 'win') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.5);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.6);
+                }
+            } catch (e) {
+                // Silent fallback if audio context fails
+            }
+        };
+
+        /* ================= CORE GAME FUNCTIONS ================= */
+        function startGame(e) {
+            e.preventDefault();
+            const input = document.getElementById('student-name-input');
+            if (!input.value.trim()) return;
+
+            gameState.playerName = input.value.trim();
+            document.getElementById('nav-student-name').innerText = gameState.playerName;
+            document.getElementById('nav-player-info').classList.remove('hidden');
+
+            // Screen transition
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-dashboard').classList.remove('hidden');
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            let totalCorrect = gameState.questScores.reduce((a, b) => a + b, 0);
+            // 25 questions total * 4 pts = 100 max score
+            gameState.score = totalCorrect * 4;
+            document.getElementById('nav-score').innerText = gameState.score;
+
+            let completedCount = gameState.completedQuests.filter(Boolean).length;
+            document.getElementById('completed-count').innerText = `${completedCount}/3`;
+
+            // Quest 2 Unlock
+            if (gameState.completedQuests[0]) {
+                const q2Status = document.getElementById('status-q2');
+                q2Status.className = "text-xs font-bold text-amber-600 bg-amber-50 py-1 px-3 rounded-full inline-block mb-3";
+                q2Status.innerHTML = '<i class="fa-solid fa-circle-play mr-1"></i> Disponible (36 pts)';
+                
+                const btn2 = document.getElementById('btn-q2');
+                btn2.disabled = false;
+                btn2.className = "w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-sm transition";
+            }
+
+            // Quest 3 Unlock
+            if (gameState.completedQuests[1]) {
+                const q3Status = document.getElementById('status-q3');
+                q3Status.className = "text-xs font-bold text-amber-600 bg-amber-50 py-1 px-3 rounded-full inline-block mb-3";
+                q3Status.innerHTML = '<i class="fa-solid fa-circle-play mr-1"></i> Disponible (32 pts)';
+
+                const btn3 = document.getElementById('btn-q3');
+                btn3.disabled = false;
+                btn3.className = "w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-sm transition";
+            }
+
+            // Check if all quests completed
+            if (completedCount === 3) {
+                document.getElementById('claim-certificate-banner').classList.remove('hidden');
+            }
+        }
+
+        function launchQuest(questNum) {
+            gameState.currentQuestIndex = questNum - 1;
+            gameState.currentQuestionIndex = 0;
+
+            document.getElementById('screen-dashboard').classList.add('hidden');
+            document.getElementById('screen-gameplay').classList.remove('hidden');
+
+            const quest = questsData[gameState.currentQuestIndex];
+            document.getElementById('quest-title').innerText = quest.title;
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const quest = questsData[gameState.currentQuestIndex];
+            const qData = quest.questions[gameState.currentQuestionIndex];
+
+            // Question counter tracker
+            document.getElementById('question-tracker').innerText = `${gameState.currentQuestionIndex + 1}/${quest.questions.length}`;
+
+            // Reset UI states
+            document.getElementById('feedback-panel').classList.add('hidden');
+            document.getElementById('btn-submit').classList.remove('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+
+            const container = document.getElementById('question-container');
+            
+            // Build Multiple Choice
+            let optionsHTML = qData.options.map((opt, idx) => `
+                <label class="option-label flex items-center p-4 border-2 border-slate-200 rounded-2xl cursor-pointer hover:border-orange-400 hover:bg-orange-50/50 transition">
+                    <input type="radio" name="answer" value="${idx}" class="w-5 h-5 text-orange-600 focus:ring-orange-500 mr-3">
+                    <span class="font-bold text-slate-500 mr-2">${String.fromCharCode(65 + idx)}.</span>
+                    <span class="text-slate-800 font-semibold text-base sm:text-lg">${opt}</span>
+                </label>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="bg-amber-50/40 p-4 rounded-2xl border border-amber-200/60 mb-4">
+                    <p class="text-base sm:text-xl font-bold text-slate-800 leading-relaxed">${qData.question}</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="options-group">
+                    ${optionsHTML}
+                </div>
+            `;
+        }
+
+        let selectedAnswerIdx = null;
+
+        function submitAnswer() {
+            const quest = questsData[gameState.currentQuestIndex];
+            const qData = quest.questions[gameState.currentQuestionIndex];
+            const selected = document.querySelector('input[name="answer"]:checked');
+
+            if (!selected) {
+                alert("Por favor, selecciona una respuesta antes de continuar.");
+                return;
+            }
+
+            const selectedVal = parseInt(selected.value);
+            const isCorrect = (selectedVal === qData.correct);
+
+            // Disable radio inputs
+            document.querySelectorAll('input[name="answer"]').forEach(inp => inp.disabled = true);
+
+            // Update scores
+            if (isCorrect) {
+                gameState.questScores[gameState.currentQuestIndex]++;
+                playSound('correct');
+            } else {
+                playSound('wrong');
+            }
+
+            // Show feedback
+            const feedbackPanel = document.getElementById('feedback-panel');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            feedbackPanel.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackPanel.className = "mt-6 p-4 rounded-2xl border border-green-300 bg-green-50 text-green-900";
+                feedbackIcon.innerHTML = '<i class="fa-solid fa-circle-check text-green-600"></i>';
+                feedbackTitle.innerText = "¡Correcto! (+4 puntos)";
+                feedbackText.innerHTML = qData.explanation;
+            } else {
+                feedbackPanel.className = "mt-6 p-4 rounded-2xl border border-red-300 bg-red-50 text-red-900";
+                feedbackIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
+                feedbackTitle.innerText = `Incorrecto. La respuesta correcta era: (${String.fromCharCode(65 + qData.correct)}) ${qData.options[qData.correct]}`;
+                feedbackText.innerHTML = qData.explanation;
+            }
+
+            // Toggle buttons
+            document.getElementById('btn-submit').classList.add('hidden');
+            document.getElementById('btn-next').classList.remove('hidden');
+
+            updateDashboard();
+        }
+
+        function nextQuestion() {
+            const quest = questsData[gameState.currentQuestIndex];
+
+            if (gameState.currentQuestionIndex + 1 < quest.questions.length) {
+                gameState.currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                // Quest complete
+                gameState.completedQuests[gameState.currentQuestIndex] = true;
+                playSound('win');
+                updateDashboard();
+                returnToDashboard();
+            }
+        }
+
+        function returnToDashboard() {
+            document.getElementById('screen-gameplay').classList.add('hidden');
+            document.getElementById('screen-certificate').classList.add('hidden');
+            document.getElementById('screen-dashboard').classList.remove('hidden');
+        }
+
+        function showCertificate() {
+            document.getElementById('screen-dashboard').classList.add('hidden');
+            document.getElementById('screen-certificate').classList.remove('hidden');
+
+            // Fill student info
+            document.getElementById('cert-student-name').innerText = gameState.playerName;
+            
+            // Format score out of 100 points & grade
+            let totalScore = gameState.score; // 0 to 100
+            document.getElementById('cert-score').innerText = `${totalScore} / 100 (${totalScore}%)`;
+
+            // Calculate rank grade based on standard grading scale
+            let rank = "Chef Ayudante (C)";
+            if (totalScore >= 90) rank = "Maestro Chef (A+)";
+            else if (totalScore >= 80) rank = "Chef Executivo (A)";
+            else if (totalScore >= 70) rank = "Chef de Cuisine (B)";
+            else if (totalScore >= 60) rank = "Cocinero (C)";
+            
+            document.getElementById('cert-rank').innerText = rank;
+
+            // Date formatting
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('cert-date').innerText = dateStr;
+        }
+    </script>
+</body>
+</html>
